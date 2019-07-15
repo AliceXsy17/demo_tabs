@@ -1,0 +1,74 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<title>读取并修改元素的属性</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="css/tab.css" />
+<style>
+  .active {
+    background: #fff;
+  }
+</style>
+</head>
+<body>
+	<h2>实现多标签页效果</h2>
+  <div class="tabs" data-parent="content">
+    <ul id="tab">
+      <li><a href="#content1" data-toggle="tab" data-target="content1">10元套餐</a></li>
+      <li><a href="#content2" data-toggle="tab" data-target="content2">30元套餐</a></li>					
+      <li><a href="#content3" data-toggle="tab" data-target="content3">50元包月</a></li>
+    </ul>
+    <div id="container">
+      <div id="content1">
+        10元套餐详情：<br />&nbsp;每月套餐内拨打100分钟，超出部分2毛/分钟
+      </div>
+      <div id="content2">
+        30元套餐详情：<br />&nbsp;每月套餐内拨打300分钟，超出部分1.5毛/分钟
+      </div>
+      <div id="content3">
+        50元包月详情：<br />&nbsp;每月无限量随心打
+      </div>
+    </div>
+  </div>
+  <script>
+  (function(){
+	  var i = 0;
+	  var tab_parent = document.querySelector("[data-parent=content]");
+	  var tabs = document.querySelectorAll("ul>li>[data-toggle=tab]");
+	  //利用事件冒泡原理采用事件委托给子元素的父元素一次性绑定事件
+      tab_parent.onclick = function(e){
+		  //获得具体被点击的子元素
+		  var tab = e.target;
+		  //找到需要显示元素的id
+		  var id = tab.dataset.target;
+		  //找到需要显示的元素
+		  var content = document.getElementById(id);
+         //将需要显示的元素z-index属性设置为最高
+		  content.style.zIndex = i++;
+		  //新建一个数组，保存每次点击时各个需要显示元素的z-index值，
+		  //以便找出其中的最大值，从而给选项卡设置样式
+		  var index_arr = [];
+		  for(var j = 0; j < tabs.length; j++){
+			  //每次点击后都循坏去掉每个选项卡的选中样式
+			  tabs[j].className = "";
+			  var id1 = tabs[j].dataset.target;
+			  var content1 = document.getElementById(id1);
+			  //获取每个需要显示元素的z-index值
+			  var getIndex = Number(getComputedStyle(content1).zIndex);
+			  if(getIndex >= 0){
+				  //存入数组
+                   index_arr.push(getIndex);
+				  }
+		  };
+		  //找出数组中的最大值
+		  var maxIndex = Math.max.apply(null,index_arr);
+		  //找出最大值在数组中的位置
+		  var maxIndex_position = index_arr.indexOf(maxIndex);
+		  //给选项卡设置样式
+           tabs[maxIndex_position].className = "active";
+	  }
+	  
+	  })();
+  </script>
+</body>
+</html>
