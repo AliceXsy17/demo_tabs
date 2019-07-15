@@ -39,35 +39,18 @@
       tab_parent.onclick = function(e){
 		  //获得具体被点击的子元素
 		  var tab = e.target;
+		  //点击事件发生之后遍历清除选项卡样式
+		  for(var j = 0; j < tabs.length; j++) {
+			  tabs[j].className = "";
+		  };
+		  tab.className = "active";
 		  //找到需要显示元素的id
 		  var id = tab.dataset.target;
 		  //找到需要显示的元素
 		  var content = document.getElementById(id);
          //将需要显示的元素z-index属性设置为最高
 		  content.style.zIndex = i++;
-		  //新建一个数组，保存每次点击时各个需要显示元素的z-index值，
-		  //以便找出其中的最大值，从而给选项卡设置样式
-		  var index_arr = [];
-		  for(var j = 0; j < tabs.length; j++){
-			  //每次点击后都循坏去掉每个选项卡的选中样式
-			  tabs[j].className = "";
-			  var id1 = tabs[j].dataset.target;
-			  var content1 = document.getElementById(id1);
-			  //获取每个需要显示元素的z-index值
-			  var getIndex = Number(getComputedStyle(content1).zIndex);
-			  if(getIndex >= 0){
-				  //存入数组
-                   index_arr.push(getIndex);
-				  }
-		  };
-		  //找出数组中的最大值
-		  var maxIndex = Math.max.apply(null,index_arr);
-		  //找出最大值在数组中的位置
-		  var maxIndex_position = index_arr.indexOf(maxIndex);
-		  //给选项卡设置样式
-           tabs[maxIndex_position].className = "active";
-	  }
-	  
+  }
 	  })();
   </script>
 </body>
